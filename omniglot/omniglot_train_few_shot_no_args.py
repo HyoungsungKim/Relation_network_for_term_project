@@ -6,7 +6,7 @@ from torch.nn.modules.activation import ReLU, Sigmoid
 from torch.optim.lr_scheduler import StepLR
 
 import numpy as np
-import task_generator as tg
+import task_generator_no_args as tg
 import os
 import math
 import random
