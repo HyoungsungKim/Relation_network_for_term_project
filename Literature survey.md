@@ -65,3 +65,72 @@ In this paper, our main contributions are outlined as the following two aspects:
 
 1. We presented a modeling process of RA ranking score for each unseen image according to the relative relationship between seen and unseen classes, where the assumption of all seen and unseen images obeying a definite distribution (e.g., Gaussian distribution in traditional RA) is unnecessary to be satisfied
 2. We proposed a novel zero-shot image classifier (RF-RA) to realize the non-linear mapping from RA ranking scores of testing images to class labels, overcoming the drawback of MLE
+
+## Ensemble methods: bagging, boosting and stacking
+
+https://towardsdatascience.com/ensemble-methods-bagging-boosting-and-stacking-c9214a10a205
+
+We will discuss some well known notions such as bootstrapping, bagging,  random forest, boosting, stacking and many others that are the basis of  ensemble learning.
+
+### What are ensemble methods?
+
+Ensemble learning is a machine learning paradigm where multiple models (often called “weak learners”) are trained to solve the same problem and combined to get better results.
+
+#### Single weak learner
+
+A low bias and a low variance are the two most fundamental features expected for a model. This is the well known **bias-variance tradeoff**.
+
+In ensemble learning theory, we call **weak learners** (or **base models**) models that can be used as building blocks for designing more complex models by combining several of them.
+
+- Most of the time, these basics models perform not so well by themselves either because they have a high bias (low degree of freedom models, for example) or because they have too much variance to be robust (high degree of freedom models, for example).
+- Then, the idea of ensemble methods is to try reducing bias and/or variance of such weak learners by combining several of them together in order to create a **strong learner** (or **ensemble model**) that achieves better performances.
+
+#### Combine Weak Learners
+
+We first need to select our base models to be aggregated. 
+
+- One important point is that our choice of weak learners should be **coherent with the way we aggregate these models**.
+- If we ***choose base models with low bias but high variance***, it should be with an aggregating method that tends to ***reduce variance*** whereas if we ***choose base models with low variance but high bias***, it should be with an aggregating method that ***tends to reduce bias***.
+
+Then how...?
+
+- **bagging**, that often considers ***homogeneous weak learners***, learns them independently from each other in parallel and combines them following some kind of deterministic averaging process
+- **boosting**, that often considers ***homogeneous weak learners***, learns them sequentially in a very adaptive way (a base model depends on the previous ones) and combines them following a deterministic strategy
+- **stacking**, that often considers ***heterogeneous weak learners***, learns them in parallel and combines them by training a meta-model to output a prediction based on the different weak models predictions
+
+> homogeneous : 동질
+>
+> heterogeneous : 이질
+
+Very roughly, we can say that ***bagging will mainly focus at getting an ensemble model with less variance*** than its components whereas ***boosting and stacking will mainly try to produce strong models less biased*** than their components (even if variance can also be reduced).
+
+### Bagging
+
+#### Bootstrap aggregating - parallel methods
+
+“Bagging” (standing for “bootstrap aggregating”) aims at producing an ensemble model that is **more robust** than the individual models composing it.
+
+Under some assumptions, these samples have pretty **good statistical properties**: 
+
+1. First approximation, they can be seen as being drawn both directly from the true underlying (and often unknown) data distribution and independently from each others.
+   - So, ***they can be considered as representative and independent samples of the true data distribution (almost i.i.d. samples)***. The hypothesis that have to be verified to make this approximation valid are twofold. 
+     1. First, ***the size N of the initial dataset should be large enough to capture most of the complexity of the underlying distribution*** so that sampling from the dataset is a good approximation of sampling from the real distribution (**representativity**).
+     2. Second, ***the size N of the dataset should be large enough compared to the size B of the bootstrap samples*** so that samples are not too much correlated (**independence**).
+   - Notice that in the following, we will sometimes make reference to these properties (representativity and independence) of bootstrap samples: the reader should always keep in mind that **this is only an approximation**.
+
+In order to estimate the variance of such an estimator, we need to evaluate it on several independent samples drawn from the distribution of interest.
+
+- In most of the cases, considering truly independent samples would require too much data compared to the amount really available.
+- We can then use bootstrapping to generate several bootstrap samples that can be considered as being “almost-representative” and “almost-independent” (almost i.i.d. samples).
+- These bootstrap samples will allow us to approximate the variance of the estimator, by evaluating its value for each of them.
+
+#### Bagging
+
+When training a model we obtain a function that takes an input, returns an output and that is defined with respect to the training dataset.
+
+- Due to the theoretical variance of the training dataset, the fitted model is also subject to variability: **if another dataset had been observed, we would have obtained a different model**.
+
+The idea of bagging is then simple: ***we want to fit several independent models and “average” their predictions in order to obtain a model with a lower variance***.
+
+- However, we can’t, in practice, ***fit fully independent models because it would require too much data***.
+- So, ***we rely on the good “approximate properties” of bootstrap samples*** (representativity and independence) to  fit models that are almost independent.
