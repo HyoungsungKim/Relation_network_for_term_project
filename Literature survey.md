@@ -280,3 +280,30 @@ We split the dataset in two folds because predictions on data that have been use
   - For any observation, the prediction of the weak learners are done with instances of these weak learners trained on the k-1 folds that do not contain the considered observation.
     - In other words, it consists in training on k-1 fold in order to make predictions on the remaining fold and that  iteratively so that to obtain predictions for observations in any folds.
     - Doing so, we can produce relevant predictions for each observation of our dataset and then train our meta-model on all these predictions.
+
+## What is XGBoost
+
+https://www.kaggle.com/dansbecker/xgboost
+
+## Ensemble methods of scikit-learn documents
+
+https://scikit-learn.org/stable/modules/ensemble.html
+
+Two families of ensemble methods are usually distinguished:
+
+- In **averaging methods**, the driving principle is to build several estimators independently and then to average their predictions. On average, the combined estimator is usually better than any of the single base estimator because ***its variance is reduced***.
+  - e.g., Bagging methods, Forests of randomized trees
+- By contrast, in **boosting methods**, base estimators are built sequentially and one tries to ***reduce the bias*** of the combined estimator. The motivation is to combine several weak models to produce a powerful ensemble.
+  - e.g., AdaBoost, Gradient Tree Boosting
+
+### Bagging meta-estimator
+
+In ensemble algorithms, bagging methods form a class of algorithms which build several instances of a black-box estimator on random subsets of the original training set and then aggregate their individual predictions to form a final prediction.
+
+- ***These methods are used as a way to reduce the variance of a base estimator*** (e.g., a decision tree), by introducing randomization into its construction procedure and then making an ensemble out of it.
+- In many cases, bagging methods constitute(구성되다) a very simple way to improve with respect to a single model, without making it necessary to adapt the underlying base algorithm.
+- ***As they provide a way to reduce overfitting, bagging methods work best with strong and complex models*** (e.g., fully developed decision trees), in contrast with boosting methods which usually work best with weak models (e.g., shallow decision trees).
+
+### Forests of randomized trees
+
+Indeed, individual decision trees typically exhibit high variance and tend to overfit. The injected randomness in forests yield decision trees with somewhat decoupled prediction errors. By taking an average of those predictions, some errors can cancel out. Random forests achieve a reduced variance by combining diverse trees, sometimes at the cost of a slight increase in bias. In practice the variance reduction is often significant hence yielding an overall better model.
